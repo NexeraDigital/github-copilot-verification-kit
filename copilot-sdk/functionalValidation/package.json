@@ -1,0 +1,26 @@
+{
+  "name": "copilot-sdk-functional-validation",
+  "version": "1.0.0",
+  "description": "Functional validation tests for GitHub Copilot SDK",
+  "type": "module",
+  "scripts": {
+    "verify": "npm run test && npm run test:streaming",
+    "test": "cross-env COPILOT_CLI_PATH=copilot npx tsx test-auth.ts",
+    "test:streaming": "cross-env COPILOT_CLI_PATH=copilot npx tsx test-streaming.ts",
+    "test:win": "set COPILOT_CLI_PATH=copilot&& npx tsx test-auth.ts",
+    "test:streaming:win": "set COPILOT_CLI_PATH=copilot&& npx tsx test-streaming.ts"
+  },
+  "dependencies": {
+    "@github/copilot": "^0.0.384",
+    "@github/copilot-sdk": "latest"
+  },
+  "devDependencies": {
+    "@types/node": "^20.11.0",
+    "cross-env": "^7.0.3",
+    "tsx": "^4.7.0",
+    "typescript": "^5.3.3"
+  },
+  "engines": {
+    "node": ">=18.0.0"
+  }
+}
