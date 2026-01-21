@@ -13,8 +13,8 @@ npm run verify
 ## Prerequisites
 
 1. **Node.js 18+** - Required by the SDK
-2. **GitHub Copilot CLI** - Must be installed and in PATH
-3. **GitHub Copilot Subscription** - Active subscription required
+2. **GitHub Copilot Subscription** - Active subscription required
+3. **GitHub Copilot CLI** - See installation options below
 
 ### Installing Node.js
 
@@ -29,19 +29,32 @@ You should see `v18.x.x` or higher (e.g., `v20.11.0`).
 
 ### Installing Copilot CLI
 
-Follow the official guide: https://docs.github.com/en/copilot/how-tos/set-up/install-copilot-cli
+**IMPORTANT:** The tests will use the Copilot CLI that comes bundled with the `@github/copilot` npm package (installed automatically via `npm install`). You typically **do not** need to install a separate standalone Copilot CLI.
 
-Verify installation:
+#### Recommended Setup (Choose One):
+
+**Option 1: VS Code Extension (Recommended)**
+- Install the [GitHub Copilot extension](https://marketplace.visualstudio.com/items?itemName=GitHub.copilot) in VS Code
+- Sign in with your GitHub account in VS Code
+- The extension includes a working Copilot CLI
+
+**Option 2: GitHub CLI Extension**
 ```bash
-copilot --version
+# Install GitHub CLI first if you haven't: https://cli.github.com/
+gh extension install github/gh-copilot
+gh auth login
 ```
 
-### Authentication
+**Option 3: Use Bundled CLI (Default)**
+- Just run `npm install` in the test directory
+- The tests are pre-configured to use the bundled CLI from `@github/copilot` package
+- No additional installation needed
 
-Login to Copilot CLI:
-```bash
-copilot auth login
-```
+#### Avoid Known Issues:
+
+⚠️ **DO NOT install `@githubnext/github-copilot-cli`** - This older package has authentication issues and may cause infinite loops on Windows.
+
+⚠️ **Windows Users:** If you see "`copilot` is not recognized" or shell integration loops, the tests will automatically fall back to the bundled CLI. No action needed.
 
 ## Using GitHub Copilot in VS Code
 
@@ -60,12 +73,12 @@ Copy and paste this prompt into Copilot Chat:
 ```
 Help me run the GitHub Copilot SDK verification tests in this project.
 
-1. First, check if I have Node.js 18+ installed. If not, tell me how to install it.
-2. Check if I have the GitHub Copilot CLI installed. If not, help me install it.
-3. Help me authenticate with `copilot auth login`
-4. Navigate to the copilot-sdk/functionalValidation folder
-5. Install dependencies with npm install
-6. Run the tests with npm run verify
+1. Check if I have Node.js 18+ installed
+2. Navigate to copilot-sdk/functionalValidation folder
+3. Install dependencies with npm install
+4. Run the tests with npm run verify
+
+Note: The tests use the bundled Copilot CLI from @github/copilot package, so no separate CLI installation is needed.
 
 Guide me through each step and let me know if anything fails.
 ```
@@ -131,25 +144,49 @@ Cleaning up...
 
 ## Troubleshooting
 
-### "copilot: command not found" or spawn errors on Windows
-The SDK has been configured to automatically find the CLI on Windows by using the `npm-loader.js` file directly.
+### Windows: Shell Integration Loop with `copilot` command
+If you see "`Cannot find GitHub Copilot CLI`" repeatedly prompting for installation:
+- **DO NOT** manually install `@githubnext/github-copilot-cli`
+- This is a known issue with Windows PowerShell shell integration
+- The tests will automatically use the bundled CLI from `node_modules/@github/copilot/`
+- Simply run: `npm install` then `npm run verify` - it will work without the standalone CLI
 
-If you still encounter issues:
-1. Ensure `@github/copilot` is installed (either globally or locally in this project)
-2. The tests are configured to use the local installation at `node_modules/@github/copilot/npm-loader.js`
-3. If needed, set `COPILOT_CLI_PATH` environment variable to the full path of your copilot installation
+### "copilot: command not found" or spawn errors on Windows
+The SDK is configured to automatically find the bundled CLI on Windows by using the `npm-loader.js` file directly.
+
+**Solution:**
+1. Make sure you ran `npm install` in the `copilot-sdk/functionalValidation` directory
+2. The `@github/copilot` package will be installed locally
+3. Tests will automatically use `node_modules/@github/copilot/npm-loader.js`
+4. No additional CLI installation needed
+
+### Authentication Errors with `@githubnext/github-copilot-cli`
+If you see errors like "`getaddrinfo ENOTFOUND next-waitlist.azurewebsites.net`":
+- This package is deprecated and has authentication issues
+- Uninstall it: `npm uninstall -g @githubnext/github-copilot-cli`
+- The verification tests don't need this package
+- Use the bundled CLI instead (automatically available after `npm install`)
 
 ### "copilot: command not found" (Unix/Mac)
-- Install Copilot CLI: https://docs.github.com/en/copilot/how-tos/set-up/install-copilot-cli
-- Ensure it's in your PATH
+- The bundled CLI should work automatically after running `npm install`
+- If issues persist, install via GitHub CLI: `gh extension install github/gh-copilot`
+- Or install VS Code GitHub Copilot extension
 
 ### Authentication Errors (401/403)
-- Run `copilot auth login`
-- Verify your subscription: https://github.com/settings/copilot
+The bundled CLI in `@github/copilot` package handles authentication automatically through:
+- VS Code GitHub Copilot extension (if installed)
+- GitHub CLI authentication (`gh auth login`)
+- Environment variables
+
+**Troubleshooting steps:**
+1. If you have VS Code with GitHub Copilot extension: Sign in to GitHub in VS Code
+2. If you have GitHub CLI: Run `gh auth login` and follow the prompts
+3. Verify: `gh auth status` should show you're logged in
 
 ### Timeout Errors
 - Check your network connection
 - Try increasing the timeout in the test scripts
+- Verify you have an active Copilot subscription at https://github.com/settings/copilot
 
 ## Reporting Issues
 
@@ -159,10 +196,21 @@ If tests fail after following troubleshooting steps, please provide:
 2. **System Information:**
    - Operating System (e.g., Windows 11, macOS 14.2, Ubuntu 22.04)
    - Node.js version: `node --version`
-   - Copilot CLI version: `copilot --version`
-3. **Authentication Status:** Output of `copilot auth status`
-4. **Network:** Are you behind a corporate proxy or firewall?
-5. **Screenshots** of any error dialogs if applicable
+   - npm version: `npm --version`
+3. **Package Verification:**
+   - Run: `npm list @github/copilot` in the test directory
+   - Include the output showing package version
+4. **Authentication Status:**
+   - If using GitHub CLI: `gh auth status`
+   - If using VS Code: Confirm GitHub Copilot extension is installed and signed in
+5. **Network:** Are you behind a corporate proxy or firewall?
+6. **Screenshots** of any error dialogs if applicable
+
+### Common Mistakes to Avoid:
+- ❌ Installing `@githubnext/github-copilot-cli` globally (causes issues)
+- ❌ Trying to run `copilot auth login` before npm install (not needed)
+- ❌ Running tests outside the `copilot-sdk/functionalValidation` directory
+- ✅ Just run `npm install` then `npm run verify` in the test directory
 
 ## Next Steps
 

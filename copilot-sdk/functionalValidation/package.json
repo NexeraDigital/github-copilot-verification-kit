@@ -5,10 +5,10 @@
   "type": "module",
   "scripts": {
     "verify": "npm run test && npm run test:streaming",
-    "test": "cross-env COPILOT_CLI_PATH=copilot npx tsx test-auth.ts",
-    "test:streaming": "cross-env COPILOT_CLI_PATH=copilot npx tsx test-streaming.ts",
-    "test:win": "set COPILOT_CLI_PATH=copilot&& npx tsx test-auth.ts",
-    "test:streaming:win": "set COPILOT_CLI_PATH=copilot&& npx tsx test-streaming.ts"
+    "test": "npx tsx test-auth.ts",
+    "test:streaming": "npx tsx test-streaming.ts",
+    "test:win": "npx tsx test-auth.ts",
+    "test:streaming:win": "npx tsx test-streaming.ts"
   },
   "dependencies": {
     "@github/copilot": "^0.0.384",

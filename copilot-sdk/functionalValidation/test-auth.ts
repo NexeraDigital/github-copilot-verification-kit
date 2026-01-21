@@ -29,10 +29,12 @@ async function main() {
 
         // Use the npm-loader.js file directly - SDK detects .js and runs via node
         const loaderPath = new URL("./node_modules/@github/copilot/npm-loader.js", import.meta.url).pathname;
+        // Decode URL-encoded characters (e.g., %20 for spaces)
+        const decodedPath = decodeURIComponent(loaderPath);
         // On Windows, remove leading slash from /C:/... paths
-        const fixedPath = process.platform === "win32" && loaderPath.startsWith("/")
-            ? loaderPath.slice(1)
-            : loaderPath;
+        const fixedPath = process.platform === "win32" && decodedPath.startsWith("/")
+            ? decodedPath.slice(1)
+            : decodedPath;
         return fixedPath;
     };
 
