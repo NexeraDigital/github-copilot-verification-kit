@@ -16,6 +16,17 @@ npm run verify
 2. **GitHub Copilot CLI** - Must be installed and in PATH
 3. **GitHub Copilot Subscription** - Active subscription required
 
+### Installing Node.js
+
+Download and install Node.js 18 or later from: https://nodejs.org/
+
+Verify installation:
+```bash
+node --version
+```
+
+You should see `v18.x.x` or higher (e.g., `v20.11.0`).
+
 ### Installing Copilot CLI
 
 Follow the official guide: https://docs.github.com/en/copilot/how-tos/set-up/install-copilot-cli
