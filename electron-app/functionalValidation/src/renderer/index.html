@@ -20,7 +20,7 @@
             padding: 20px;
         }
         .container {
-            max-width: 600px;
+            max-width: 900px;
             margin: 0 auto;
         }
         h1 {
@@ -28,12 +28,20 @@
             margin-bottom: 30px;
             color: #00d4ff;
         }
+        .status-grid {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 20px;
+            margin-bottom: 20px;
+        }
         .status-card {
             background: rgba(255, 255, 255, 0.05);
             border-radius: 12px;
             padding: 20px;
-            margin-bottom: 20px;
             border: 1px solid rgba(255, 255, 255, 0.1);
+        }
+        .status-card.full-width {
+            grid-column: span 2;
         }
         .status-card h2 {
             font-size: 14px;
@@ -221,38 +229,40 @@
     <div class="container">
         <h1>Electron Copilot Validation</h1>
 
-        <div class="status-card">
-            <h2>Offline Verification</h2>
-            <div id="offline-status">
-                <div class="indicator" id="offline-indicator"></div>
-                <span class="status-value status-pending" id="offline-text">Checking...</span>
+        <div class="status-grid">
+            <div class="status-card">
+                <h2>Offline Verification</h2>
+                <div id="offline-status">
+                    <div class="indicator" id="offline-indicator"></div>
+                    <span class="status-value status-pending" id="offline-text">Checking...</span>
+                </div>
             </div>
-        </div>
 
-        <div class="status-card">
-            <h2>Health Check</h2>
-            <div id="health-status" class="status-value status-pending">Checking...</div>
-        </div>
+            <div class="status-card">
+                <h2>Health Check</h2>
+                <div id="health-status" class="status-value status-pending">Checking...</div>
+            </div>
 
-        <div class="status-card">
-            <h2>App Information</h2>
-            <div id="app-info" class="status-value">Loading...</div>
-        </div>
+            <div class="status-card">
+                <h2>App Information</h2>
+                <div id="app-info" class="status-value">Loading...</div>
+            </div>
 
-        <div class="status-card">
-            <h2>Versions</h2>
-            <div class="version-grid">
-                <div class="version-item">
-                    <div class="version-label">Electron</div>
-                    <div class="version-value" id="electron-version">-</div>
-                </div>
-                <div class="version-item">
-                    <div class="version-label">Chrome</div>
-                    <div class="version-value" id="chrome-version">-</div>
-                </div>
-                <div class="version-item">
-                    <div class="version-label">Node</div>
-                    <div class="version-value" id="node-version">-</div>
+            <div class="status-card">
+                <h2>Versions</h2>
+                <div class="version-grid">
+                    <div class="version-item">
+                        <div class="version-label">Electron</div>
+                        <div class="version-value" id="electron-version">-</div>
+                    </div>
+                    <div class="version-item">
+                        <div class="version-label">Chrome</div>
+                        <div class="version-value" id="chrome-version">-</div>
+                    </div>
+                    <div class="version-item">
+                        <div class="version-label">Node</div>
+                        <div class="version-value" id="node-version">-</div>
+                    </div>
                 </div>
             </div>
         </div>
