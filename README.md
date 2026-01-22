@@ -22,6 +22,25 @@ The copilot-sdk documentation includes:
 - Expected output and success criteria
 - Tips for using GitHub Copilot Chat to help run tests
 
+### Electron App (Restricted Network)
+Functional validation tests that verify a compiled Electron app can run in restricted network environments, and that the Copilot SDK can be integrated within Electron apps.
+
+**Quick Start:**
+```bash
+cd electron-app/functionalValidation
+npm install
+npm run verify          # Test offline capability (no network required)
+npm run test:copilot    # Test SDK integration (requires auth)
+```
+
+**📖 Full Documentation:** [docs/electron-app.md](docs/electron-app.md)
+
+The electron-app documentation includes:
+- Building and packaging the Electron app
+- Testing offline/restricted network capability
+- Copilot SDK integration in Electron context
+- Troubleshooting build and launch issues
+
 ## Prerequisites
 
 - **Node.js 18+** - Required by the SDK

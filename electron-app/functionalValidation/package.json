@@ -1,0 +1,51 @@
+{
+  "name": "electron-copilot-functional-validation",
+  "version": "1.0.0",
+  "description": "Functional validation tests for Electron app in restricted network environments",
+  "type": "module",
+  "main": "dist/main.js",
+  "engines": {
+    "node": ">=18.0.0"
+  },
+  "scripts": {
+    "build:ts": "npx tsc",
+    "build:app": "npm run build:ts && npx electron-builder --dir",
+    "start": "npm run build:ts && npx electron .",
+    "verify": "npm run build:app && npx tsx test-launch.ts",
+    "test:launch": "npx tsx test-launch.ts",
+    "test:copilot": "npx tsx test-copilot.ts"
+  },
+  "dependencies": {
+    "@github/copilot": "^0.0.384",
+    "@github/copilot-sdk": "latest"
+  },
+  "devDependencies": {
+    "electron": "^33.0.0",
+    "electron-builder": "^25.0.0",
+    "tsx": "^4.7.0",
+    "typescript": "^5.3.0"
+  },
+  "build": {
+    "appId": "com.github.copilot.electron-validation",
+    "productName": "Electron Copilot Validation",
+    "directories": {
+      "output": "release"
+    },
+    "files": [
+      "dist/**/*",
+      "package.json"
+    ],
+    "win": {
+      "target": "dir",
+      "sign": false,
+      "signAndEditExecutable": false
+    },
+    "mac": {
+      "target": "dir"
+    },
+    "linux": {
+      "target": "dir"
+    },
+    "asar": true
+  }
+}
