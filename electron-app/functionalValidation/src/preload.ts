@@ -32,6 +32,14 @@ contextBridge.exposeInMainWorld("electronAPI", {
         testMode: boolean;
     }> => ipcRenderer.invoke("get-app-info"),
 
+    // Run Copilot SDK test
+    runCopilotTest: (testPrompt?: string): Promise<{
+        success: boolean;
+        steps: { step: string; status: "success" | "error"; message: string }[];
+        response?: string;
+        error?: string;
+    }> => ipcRenderer.invoke("run-copilot-test", testPrompt),
+
     // Platform information (safe to expose)
     platform: process.platform,
 
@@ -63,6 +71,12 @@ declare global {
                 appPath: string;
                 isPackaged: boolean;
                 testMode: boolean;
+            }>;
+            runCopilotTest: (testPrompt?: string) => Promise<{
+                success: boolean;
+                steps: { step: string; status: "success" | "error"; message: string }[];
+                response?: string;
+                error?: string;
             }>;
             platform: string;
             versions: {

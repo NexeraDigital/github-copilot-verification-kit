@@ -5,39 +5,7 @@
  * Communicates with main process via IPC.
  */
 
-// Make this file a module to allow global augmentation
-export {};
-
-// Type reference for window.electronAPI (defined in preload.ts)
-declare global {
-    interface Window {
-        electronAPI: {
-            healthCheck: () => Promise<{
-                status: string;
-                timestamp: string;
-                platform: string;
-                electronVersion: string;
-                nodeVersion: string;
-            }>;
-            offlineVerify: () => Promise<{
-                verified: boolean;
-                message: string;
-                localResourcesLoaded: boolean;
-            }>;
-            getAppInfo: () => Promise<{
-                appPath: string;
-                isPackaged: boolean;
-                testMode: boolean;
-            }>;
-            platform: string;
-            versions: {
-                node: string;
-                chrome: string;
-                electron: string;
-            };
-        };
-    }
-}
+/// <reference path="./renderer.d.ts" />
 
 // Helper to update DOM elements safely
 function updateElement(id: string, content: string, className?: string): void {
@@ -101,6 +69,102 @@ async function getAppInfo(): Promise<void> {
     }
 }
 
+// Render Copilot test results
+function renderTestResults(
+    steps: { step: string; status: "success" | "error"; message: string }[],
+    success: boolean,
+    response?: string,
+    error?: string
+): void {
+    const container = document.getElementById("test-results");
+    if (!container) return;
+
+    let html = "";
+
+    // Render each step
+    for (const step of steps) {
+        const icon = step.status === "success" ? "✓" : "✗";
+        html += `
+            <div class="step-item">
+                <div class="step-icon ${step.status}">${icon}</div>
+                <div class="step-content">
+                    <div class="step-name">${step.step}</div>
+                    <div class="step-message">${step.message}</div>
+                </div>
+            </div>
+        `;
+    }
+
+    // Final result
+    if (success) {
+        html += `
+            <div class="final-result success">
+                ✓ SUCCESS: Copilot SDK integration test passed!
+            </div>
+        `;
+    } else {
+        html += `
+            <div class="final-result error">
+                ✗ FAILED: ${error || "Unknown error"}
+            </div>
+        `;
+    }
+
+    container.innerHTML = html;
+}
+
+// Show loading state
+function showTestLoading(): void {
+    const container = document.getElementById("test-results");
+    if (!container) return;
+
+    container.innerHTML = `
+        <div class="step-item">
+            <div class="step-icon pending"><span class="spinner">⟳</span></div>
+            <div class="step-content">
+                <div class="step-name">Running Test...</div>
+                <div class="step-message">This may take a few seconds. Testing Copilot SDK connection.</div>
+            </div>
+        </div>
+    `;
+}
+
+// Run Copilot test
+async function runCopilotTest(): Promise<void> {
+    const button = document.getElementById("run-copilot-test") as HTMLButtonElement;
+    const promptInput = document.getElementById("copilot-prompt") as HTMLInputElement;
+
+    if (!button || !promptInput) return;
+
+    // Disable button during test
+    button.disabled = true;
+    button.textContent = "Running...";
+
+    showTestLoading();
+
+    try {
+        const prompt = promptInput.value.trim() || undefined;
+        const result = await window.electronAPI.runCopilotTest(prompt);
+
+        renderTestResults(
+            result.steps,
+            result.success,
+            result.response,
+            result.error
+        );
+    } catch (err) {
+        renderTestResults(
+            [],
+            false,
+            undefined,
+            err instanceof Error ? err.message : String(err)
+        );
+    } finally {
+        button.disabled = false;
+        button.textContent = "Run Test";
+    }
+}
+
 // Initialize on DOM load
 document.addEventListener("DOMContentLoaded", async () => {
     // Display versions immediately (no async needed)
@@ -112,4 +176,8 @@ document.addEventListener("DOMContentLoaded", async () => {
         checkHealth(),
         getAppInfo(),
     ]);
+
+    // Set up Copilot test button
+    const testButton = document.getElementById("run-copilot-test");
+    testButton?.addEventListener("click", runCopilotTest);
 });
