@@ -10,6 +10,35 @@ npm install
 npm run verify
 ```
 
+## Using GitHub Copilot in VS Code
+
+If you have GitHub Copilot installed in VS Code, you can use Copilot Chat to help install prerequisites and run the tests.
+
+### Open this project in VS Code
+
+1. Clone this repository
+2. Open the folder in VS Code
+3. Open Copilot Chat (Ctrl+Shift+I or Cmd+Shift+I)
+
+### Use this prompt to get started
+
+Copy and paste this prompt into Copilot Chat:
+
+```
+Help me run the GitHub Copilot SDK verification tests in this project.
+
+1. Check if I have Node.js 18+ installed
+2. Navigate to copilot-sdk/functionalValidation folder
+3. Install dependencies with npm install
+4. Run the tests with npm run verify
+
+Note: The tests use the bundled Copilot CLI from @github/copilot package, so no separate CLI installation is needed.
+
+Guide me through each step and let me know if anything fails.
+```
+
+Copilot will walk you through each step and help troubleshoot any issues.
+
 ## Prerequisites
 
 1. **Node.js 18+** - Required by the SDK
@@ -55,35 +84,6 @@ gh auth login
 ⚠️ **DO NOT install `@githubnext/github-copilot-cli`** - This older package has authentication issues and may cause infinite loops on Windows.
 
 ⚠️ **Windows Users:** If you see "`copilot` is not recognized" or shell integration loops, the tests will automatically fall back to the bundled CLI. No action needed.
-
-## Using GitHub Copilot in VS Code
-
-If you have GitHub Copilot installed in VS Code, you can use Copilot Chat to help install prerequisites and run the tests.
-
-### Open this project in VS Code
-
-1. Clone this repository
-2. Open the folder in VS Code
-3. Open Copilot Chat (Ctrl+Shift+I or Cmd+Shift+I)
-
-### Use this prompt to get started
-
-Copy and paste this prompt into Copilot Chat:
-
-```
-Help me run the GitHub Copilot SDK verification tests in this project.
-
-1. Check if I have Node.js 18+ installed
-2. Navigate to copilot-sdk/functionalValidation folder
-3. Install dependencies with npm install
-4. Run the tests with npm run verify
-
-Note: The tests use the bundled Copilot CLI from @github/copilot package, so no separate CLI installation is needed.
-
-Guide me through each step and let me know if anything fails.
-```
-
-Copilot will walk you through each step and help troubleshoot any issues.
 
 ## Running the Tests
 
