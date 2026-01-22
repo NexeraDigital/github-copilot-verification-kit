@@ -7,16 +7,6 @@ interface ElectronAPI {
         electronVersion: string;
         nodeVersion: string;
     }>;
-    offlineVerify: () => Promise<{
-        verified: boolean;
-        message: string;
-        localResourcesLoaded: boolean;
-    }>;
-    getAppInfo: () => Promise<{
-        appPath: string;
-        isPackaged: boolean;
-        testMode: boolean;
-    }>;
     runCopilotTest: (testPrompt?: string) => Promise<{
         success: boolean;
         steps: { step: string; status: "success" | "error"; message: string }[];

@@ -71,23 +71,6 @@ ipcMain.handle("health-check", () => {
     };
 });
 
-ipcMain.handle("offline-verify", () => {
-    // This handler runs purely locally - no network required
-    return {
-        verified: true,
-        message: "Application running in offline mode",
-        localResourcesLoaded: true,
-    };
-});
-
-ipcMain.handle("get-app-info", () => {
-    return {
-        appPath: app.getAppPath(),
-        isPackaged: app.isPackaged,
-        testMode: isTestMode,
-    };
-});
-
 // Get CLI path for Copilot SDK
 function getCliPath(): string {
     if (process.env.COPILOT_CLI_PATH) {

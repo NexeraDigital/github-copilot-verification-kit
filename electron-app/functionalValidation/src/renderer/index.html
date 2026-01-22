@@ -84,26 +84,6 @@
             font-weight: 600;
             color: #00d4ff;
         }
-        #offline-status {
-            display: flex;
-            align-items: center;
-            gap: 10px;
-        }
-        .indicator {
-            width: 12px;
-            height: 12px;
-            border-radius: 50%;
-            background: #fbbf24;
-            animation: pulse 2s infinite;
-        }
-        .indicator.success {
-            background: #4ade80;
-            animation: none;
-        }
-        @keyframes pulse {
-            0%, 100% { opacity: 1; }
-            50% { opacity: 0.5; }
-        }
         .copilot-section {
             margin-top: 30px;
             padding-top: 20px;
@@ -231,21 +211,8 @@
 
         <div class="status-grid">
             <div class="status-card">
-                <h2>Offline Verification</h2>
-                <div id="offline-status">
-                    <div class="indicator" id="offline-indicator"></div>
-                    <span class="status-value status-pending" id="offline-text">Checking...</span>
-                </div>
-            </div>
-
-            <div class="status-card">
                 <h2>Health Check</h2>
                 <div id="health-status" class="status-value status-pending">Checking...</div>
-            </div>
-
-            <div class="status-card">
-                <h2>App Information</h2>
-                <div id="app-info" class="status-value">Loading...</div>
             </div>
 
             <div class="status-card">

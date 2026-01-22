@@ -18,20 +18,6 @@ contextBridge.exposeInMainWorld("electronAPI", {
         nodeVersion: string;
     }> => ipcRenderer.invoke("health-check"),
 
-    // Offline verification - confirms app runs without network
-    offlineVerify: (): Promise<{
-        verified: boolean;
-        message: string;
-        localResourcesLoaded: boolean;
-    }> => ipcRenderer.invoke("offline-verify"),
-
-    // Get app information
-    getAppInfo: (): Promise<{
-        appPath: string;
-        isPackaged: boolean;
-        testMode: boolean;
-    }> => ipcRenderer.invoke("get-app-info"),
-
     // Run Copilot SDK test
     runCopilotTest: (testPrompt?: string): Promise<{
         success: boolean;
@@ -61,16 +47,6 @@ declare global {
                 platform: string;
                 electronVersion: string;
                 nodeVersion: string;
-            }>;
-            offlineVerify: () => Promise<{
-                verified: boolean;
-                message: string;
-                localResourcesLoaded: boolean;
-            }>;
-            getAppInfo: () => Promise<{
-                appPath: string;
-                isPackaged: boolean;
-                testMode: boolean;
             }>;
             runCopilotTest: (testPrompt?: string) => Promise<{
                 success: boolean;

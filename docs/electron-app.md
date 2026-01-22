@@ -17,21 +17,19 @@ npm run verify
 - **Node.js 18+** - Required by the SDK and Electron
 - **npm** - For package management
 
-### For Copilot SDK Test Only
+### For Copilot SDK Test
 - **GitHub Copilot Subscription** - Active subscription required
 - **Authentication** - Via VS Code GitHub Copilot extension or GitHub CLI
 
-## Available Tests
+## Running the Tests
 
-### Test 1: Offline Launch Test (`npm run verify`)
-
-This test verifies the Electron app can run without network access:
+### Step 1: Build and Verify Offline Capability
 
 ```bash
 npm run verify
 ```
 
-**What it does:**
+This automated test:
 1. Compiles TypeScript source files
 2. Runs electron-builder to create an unpacked app
 3. Launches the packaged app with `--test-mode`
@@ -43,27 +41,33 @@ SUCCESS: Electron app built successfully!
 SUCCESS: Electron app launches correctly!
 ```
 
-### Test 2: Copilot SDK Integration (`npm run test:copilot`)
+### Step 2: Run the Copilot SDK Integration Test (via UI)
 
-This test verifies the Copilot SDK works within an Electron context:
+1. Start the app:
+   ```bash
+   npm start
+   ```
+   Or run the packaged app:
+   ```bash
+   "release\win-unpacked\Electron Copilot Validation.exe"
+   ```
 
-```bash
-npm run test:copilot
-```
+2. In the Electron app window, you'll see:
+   - **Status cards** showing offline verification, health check, app info, and versions
+   - **Copilot SDK Integration Test** section at the bottom
 
-**What it does:**
-1. Creates a CopilotClient with the bundled CLI
-2. Starts the CLI server
-3. Pings the server for connectivity
-4. Creates a session and sends a test prompt
-5. Verifies a response is received
+3. Enter a test prompt (or use the default) and click **Run Test**
 
-**Expected output:**
-```
-SUCCESS: Copilot SDK works in Electron context!
-```
+4. The test will:
+   - Initialize the CopilotClient
+   - Start the CLI server
+   - Ping the server for connectivity
+   - Create a session
+   - Send your prompt and display the response
 
-## Individual Scripts
+**Expected result:** Green success message showing "SUCCESS: Copilot SDK integration test passed!"
+
+## Scripts Reference
 
 | Script | Description |
 |--------|-------------|
@@ -71,8 +75,6 @@ SUCCESS: Copilot SDK works in Electron context!
 | `npm run build:app` | Compile TypeScript + run electron-builder |
 | `npm run start` | Run app in development mode |
 | `npm run verify` | Build and launch test (offline) |
-| `npm run test:launch` | Launch test only (requires prior build) |
-| `npm run test:copilot` | Copilot SDK integration test |
 
 ## Success Criteria
 
@@ -83,12 +85,16 @@ SUCCESS: Copilot SDK works in Electron context!
 - App outputs `ELECTRON_TEST_SUCCESS` after initialization
 - App exits with code 0
 
-### Copilot SDK Test
-- CopilotClient creates successfully
-- CLI server starts
-- Ping returns valid response
-- Session is created
-- Test prompt receives a response
+### Copilot SDK Test (via UI)
+- All status cards show green/success state
+- "Run Test" button executes without errors
+- All test steps show green checkmarks:
+  - Initialize
+  - Start Server
+  - Ping
+  - Create Session
+  - Send Message
+- Response is received from Copilot
 
 ## Troubleshooting
 
@@ -100,26 +106,22 @@ npm install
 npx tsc --version  # Should be 5.3+
 ```
 
-### electron-builder fails
+### electron-builder fails with signing errors
 
-Check that Electron is installed correctly:
+On Windows, disable code signing (already configured) and clear the cache:
 ```bash
-npx electron --version
+rmdir /s /q "%LOCALAPPDATA%\electron-builder\Cache\winCodeSign"
+npm run build:app
 ```
 
-If on Windows with path issues, try:
+### electron-builder fails with "file in use" error
+
+Close any running Electron app instances first:
 ```bash
-npm cache clean --force
-rm -rf node_modules
-npm install
+taskkill /f /im "Electron Copilot Validation.exe" 2>nul
+taskkill /f /im electron.exe 2>nul
+npm run build:app
 ```
-
-### Launch test times out
-
-The test has a 30-second timeout. If it times out:
-1. Check the release directory exists: `ls release/`
-2. Try running the app manually: `./release/win-unpacked/Electron\ Copilot\ Validation.exe --test-mode`
-3. Look for errors in stderr output
 
 ### Copilot SDK test fails with auth error
 
@@ -129,11 +131,11 @@ The test has a 30-second timeout. If it times out:
    - **GitHub CLI**: Run `gh auth login` followed by `gh extension install github/gh-copilot`
 3. Verify at: https://github.com/settings/copilot
 
-### "ENOENT" or "not found" errors
+### Status cards stuck on "Checking..."
 
-The CLI path couldn't be resolved:
-1. Check that `@github/copilot` is installed: `ls node_modules/@github/copilot`
-2. Ensure the npm-loader.js file exists: `ls node_modules/@github/copilot/npm-loader.js`
+Open DevTools (F12 or Ctrl+Shift+I) to check for JavaScript errors. Common issues:
+- Preload script failed to load
+- IPC handlers not registered
 
 ## Technical Details
 
@@ -157,26 +159,29 @@ The CLI path couldn't be resolved:
 ```
 electron-app/functionalValidation/
 ├── package.json          # Dependencies and scripts
-├── tsconfig.json         # TypeScript config
+├── tsconfig.json         # TypeScript config (main + renderer)
+├── tsconfig.preload.json # TypeScript config (preload - CommonJS)
 ├── src/
-│   ├── main.ts          # Electron main process
-│   ├── preload.ts       # Security bridge
+│   ├── main.ts          # Electron main process + Copilot SDK
+│   ├── preload.ts       # Security bridge (IPC exposure)
 │   └── renderer/
-│       ├── index.html   # UI
-│       └── renderer.ts  # Renderer logic
-├── test-build.ts        # Build verification
-├── test-launch.ts       # Launch verification (offline)
-├── test-copilot.ts      # SDK integration test
+│       ├── index.html   # UI with test controls
+│       ├── renderer.ts  # Renderer logic
+│       └── renderer.d.ts # Type declarations
+├── test-build.ts        # Build verification script
+├── test-launch.ts       # Launch verification script
 ├── dist/                # Compiled JS (generated)
 └── release/             # Packaged app (generated)
 ```
 
-## Manual Verification
+## Manual Offline Verification
 
 To manually verify offline capability:
 
 1. Build the app: `npm run build:app`
 2. Disconnect from the network
-3. Run the executable from `release/win-unpacked/` (or equivalent)
+3. Run the executable from `release/win-unpacked/`
 4. Verify the app loads and displays status information
-5. Confirm no network errors appear
+5. Confirm no network errors appear (status cards should show success)
+
+Note: The Copilot SDK test requires network access and will fail when offline.

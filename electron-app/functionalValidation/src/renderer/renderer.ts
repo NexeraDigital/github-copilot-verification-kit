@@ -26,23 +26,6 @@ function displayVersions(): void {
     updateElement("node-version", versions.node);
 }
 
-// Run offline verification
-async function verifyOffline(): Promise<void> {
-    try {
-        const result = await window.electronAPI.offlineVerify();
-        const indicator = document.getElementById("offline-indicator");
-
-        if (result.verified) {
-            updateElement("offline-text", "Running offline - all resources local", "status-success");
-            indicator?.classList.add("success");
-        } else {
-            updateElement("offline-text", "Verification failed", "status-error");
-        }
-    } catch (error) {
-        updateElement("offline-text", `Error: ${error}`, "status-error");
-    }
-}
-
 // Run health check
 async function checkHealth(): Promise<void> {
     try {
@@ -54,18 +37,6 @@ async function checkHealth(): Promise<void> {
         }
     } catch (error) {
         updateElement("health-status", `Error: ${error}`, "status-error");
-    }
-}
-
-// Get app information
-async function getAppInfo(): Promise<void> {
-    try {
-        const info = await window.electronAPI.getAppInfo();
-        const status = info.isPackaged ? "Packaged App" : "Development Mode";
-        const testMode = info.testMode ? " (Test Mode)" : "";
-        updateElement("app-info", `${status}${testMode}`, "status-success");
-    } catch (error) {
-        updateElement("app-info", `Error: ${error}`, "status-error");
     }
 }
 
@@ -170,12 +141,8 @@ document.addEventListener("DOMContentLoaded", async () => {
     // Display versions immediately (no async needed)
     displayVersions();
 
-    // Run async checks in parallel
-    await Promise.all([
-        verifyOffline(),
-        checkHealth(),
-        getAppInfo(),
-    ]);
+    // Run health check
+    await checkHealth();
 
     // Set up Copilot test button
     const testButton = document.getElementById("run-copilot-test");

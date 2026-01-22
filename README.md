@@ -29,8 +29,8 @@ Functional validation tests that verify a compiled Electron app can run in restr
 ```bash
 cd electron-app/functionalValidation
 npm install
-npm run verify          # Test offline capability (no network required)
-npm run test:copilot    # Test SDK integration (requires auth)
+npm run verify    # Build and test offline capability
+npm start         # Launch app to run Copilot SDK test via UI
 ```
 
 **📖 Full Documentation:** [docs/electron-app.md](docs/electron-app.md)
@@ -38,7 +38,7 @@ npm run test:copilot    # Test SDK integration (requires auth)
 The electron-app documentation includes:
 - Building and packaging the Electron app
 - Testing offline/restricted network capability
-- Copilot SDK integration in Electron context
+- Running Copilot SDK integration test via the app UI
 - Troubleshooting build and launch issues
 
 ## Prerequisites
