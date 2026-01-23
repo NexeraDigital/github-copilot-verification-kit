@@ -2,6 +2,28 @@
 
 This verification kit provides functional validation tests to ensure GitHub Copilot integrations are working correctly in your environment.
 
+## Getting Started
+
+### Clone the Repository with VS Code
+
+1. Open **VS Code**
+2. Press `Ctrl+Shift+P` (or `Cmd+Shift+P` on Mac) to open the Command Palette
+3. Type **"Git: Clone"** and select it
+4. Paste the repository URL:
+   ```
+   https://github.com/Microsoft/github-copilot-verification-kit.git
+   ```
+5. Choose a folder to clone into
+6. Click **Open** when prompted to open the cloned repository
+
+### Prerequisites
+
+Before running the tests, ensure you have:
+
+- **Node.js 18+** - [Download here](https://nodejs.org/)
+- **GitHub Copilot Subscription** - Active subscription required
+- **Authentication** - Sign in to the GitHub Copilot extension in VS Code
+
 ## Available Tests
 
 ### GitHub Copilot SDK
@@ -40,12 +62,6 @@ The electron-app documentation includes:
 - Testing offline/restricted network capability
 - Running Copilot SDK integration test via the app UI
 - Troubleshooting build and launch issues
-
-## Prerequisites
-
-- **Node.js 18+** - Required by the SDK
-- **GitHub Copilot Subscription** - Active subscription required
-- **Authentication** - Via VS Code GitHub Copilot extension or GitHub CLI
 
 ## Contributing
 
