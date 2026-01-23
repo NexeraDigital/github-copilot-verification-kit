@@ -11,7 +11,7 @@ This verification kit provides functional validation tests to ensure GitHub Copi
 3. Type **"Git: Clone"** and select it
 4. Paste the repository URL:
    ```
-   https://github.com/Microsoft/github-copilot-verification-kit.git
+   https://github.com/NexeraDigital/github-copilot-verification-kit.git
    ```
 5. Choose a folder to clone into
 6. Click **Open** when prompted to open the cloned repository

@@ -69,6 +69,64 @@ node --version
 
 You should see `v18.x.x` or higher (e.g., `v20.11.0`).
 
+### Installing GitHub CLI
+
+The GitHub CLI (`gh`) is required for authentication with GitHub Copilot.
+
+#### Windows
+
+1. Download the installer from: https://cli.github.com/
+2. Run the `.msi` installer and follow the prompts
+3. Restart your terminal after installation
+
+Or install via **winget**:
+```bash
+winget install GitHub.cli
+```
+
+Or install via **Chocolatey**:
+```bash
+choco install gh
+```
+
+#### macOS
+
+```bash
+brew install gh
+```
+
+#### Linux (Debian/Ubuntu)
+
+```bash
+curl -fsSL https://cli.github.com/packages/githubcli-archive-keyring.gpg | sudo dd of=/usr/share/keyrings/githubcli-archive-keyring.gpg
+echo "deb [arch=$(dpkg --print-architecture) signed-by=/usr/share/keyrings/githubcli-archive-keyring.gpg] https://cli.github.com/packages stable main" | sudo tee /etc/apt/sources.list.d/github-cli.list > /dev/null
+sudo apt update
+sudo apt install gh
+```
+
+#### Verify Installation
+
+```bash
+gh --version
+```
+
+#### Authenticate with GitHub
+
+```bash
+gh auth login
+```
+
+Follow the prompts to:
+1. Select **GitHub.com**
+2. Select **HTTPS** as preferred protocol
+3. Authenticate via **browser** (recommended)
+4. Complete the login in your browser
+
+Verify authentication:
+```bash
+gh auth status
+```
+
 ### Installing Copilot CLI
 
 **IMPORTANT:** The tests will use the Copilot CLI that comes bundled with the `@github/copilot` npm package (installed automatically via `npm install`). You typically **do not** need to install a separate standalone Copilot CLI.
