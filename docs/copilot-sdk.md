@@ -2,7 +2,20 @@
 
 This document provides instructions for running the functional validation tests for the GitHub Copilot SDK.
 
+## Open the Terminal in VS Code
+
+Before running any commands, you need to open the integrated terminal in VS Code:
+
+1. Open VS Code with this repository
+2. Open the terminal using one of these methods:
+   - Press `` Ctrl+` `` (backtick key, usually below Escape)
+   - Or press `Ctrl+Shift+P`, type **"Terminal: Create New Terminal"**, and press Enter
+   - Or from the menu: **View > Terminal**
+3. The terminal will open at the bottom of VS Code
+
 ## Quick Start
+
+Run these commands in the VS Code terminal:
 
 ```bash
 cd copilot-sdk/functionalValidation
